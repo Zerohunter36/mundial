@@ -1,0 +1,11 @@
+node_modules
+*.log
+.DS_Store
+web/dist
+web/.vite
+.env
+.env.*
+
+# Editor directories and files
+.vscode/
+.idea/
