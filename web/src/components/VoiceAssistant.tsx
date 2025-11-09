@@ -1,11 +1,5 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import './VoiceAssistant.css';
-import {
-  appendElevenLabsLog,
-  clearElevenLabsLogs,
-  ElevenLabsLogEntry,
-  getElevenLabsLogs,
-} from '../utils/logs';
 
 type CallStatus = 'idle' | 'initializing' | 'in-call' | 'error';
 
@@ -22,29 +16,10 @@ export const VoiceAssistant = () => {
 
   const [status, setStatus] = useState<CallStatus>('idle');
   const [error, setError] = useState<string | null>(null);
-  const [logs, setLogs] = useState<ElevenLabsLogEntry[]>(() => getElevenLabsLogs());
-  const [showLogs, setShowLogs] = useState(false);
   const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
-
-  const appendLog = useCallback(
-    (entry: Omit<ElevenLabsLogEntry, 'timestamp'> & { timestamp?: string }) => {
-      const saved = appendElevenLabsLog(entry);
-      if (saved) {
-        setLogs((prev) => {
-          const next = [...prev, saved];
-          return next.slice(-200);
-        });
-      }
-    },
-    [],
-  );
-
-  const refreshLogs = useCallback(() => {
-    setLogs(getElevenLabsLogs());
-  }, []);
 
   const cleanUp = useCallback(() => {
     peerConnectionRef.current?.close();
@@ -57,8 +32,7 @@ export const VoiceAssistant = () => {
       audioRef.current.srcObject = null;
     }
     setStatus('idle');
-    appendLog({ level: 'info', message: 'Sesión de voz finalizada y recursos liberados.' });
-  }, [appendLog]);
+  }, []);
 
   useEffect(() => cleanUp, [cleanUp]);
 
@@ -66,21 +40,15 @@ export const VoiceAssistant = () => {
     if (!apiKey || !agentId) {
       setError('Configura las variables VITE_ELEVENLABS_API_KEY y VITE_ELEVENLABS_AGENT_ID.');
       setStatus('error');
-      appendLog({
-        level: 'error',
-        message: 'Faltan las variables de entorno de ElevenLabs para iniciar la llamada.',
-      });
       return;
     }
 
     setError(null);
     setStatus('initializing');
-    appendLog({ level: 'info', message: 'Iniciando sesión de voz con ElevenLabs.' });
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       localStreamRef.current = stream;
-      appendLog({ level: 'info', message: 'Micrófono autorizado por el usuario.' });
 
       const response = await fetch('https://api.elevenlabs.io/v1/convai/conversation', {
         method: 'POST',
@@ -92,17 +60,10 @@ export const VoiceAssistant = () => {
       });
 
       if (!response.ok) {
-        const text = await response.text();
-        appendLog({
-          level: 'error',
-          message: 'La API de ElevenLabs rechazó la creación de la conversación.',
-          details: text,
-        });
         throw new Error('No se pudo iniciar la llamada con el asistente.');
       }
 
       const payload = (await response.json()) as ElevenLabsSessionResponse;
-      appendLog({ level: 'info', message: 'Sesión RTC creada correctamente en ElevenLabs.' });
 
       const peerConnection = new RTCPeerConnection({
         iceServers: payload.ice_servers,
@@ -145,12 +106,6 @@ export const VoiceAssistant = () => {
       );
 
       if (!sdpResponse.ok) {
-        const text = await sdpResponse.text();
-        appendLog({
-          level: 'error',
-          message: 'La API de ElevenLabs rechazó la negociación SDP.',
-          details: text,
-        });
         throw new Error('No se pudo negociar la llamada de audio.');
       }
 
@@ -158,13 +113,11 @@ export const VoiceAssistant = () => {
       if (sdpPayload?.sdp && sdpPayload?.type) {
         await peerConnection.setRemoteDescription(new RTCSessionDescription(sdpPayload));
       }
-      appendLog({ level: 'info', message: 'Negociación SDP completada.' });
 
       const ws = new WebSocket(`${payload.websocket_url}?conversation_id=${payload.conversation_id}`);
       wsRef.current = ws;
       ws.onopen = () => {
         setStatus('in-call');
-        appendLog({ level: 'info', message: 'Conexión WebSocket establecida.' });
       };
       ws.onerror = () => {
         setError('Conexión inestable con ElevenLabs.');
@@ -191,6 +144,9 @@ export const VoiceAssistant = () => {
   const sortedLogs = useMemo(() => {
     return [...logs].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
   }, [logs]);
+      cleanUp();
+    }
+  }, [agentId, apiKey, cleanUp]);
 
   return (
     <section className="assistant">
