@@ -122,6 +122,7 @@ export const VoiceAssistant = () => {
       ws.onerror = () => {
         setError('Conexión inestable con ElevenLabs.');
         setStatus('error');
+        appendLog({ level: 'error', message: 'Error en la conexión WebSocket con ElevenLabs.' });
         cleanUp();
       };
       ws.onclose = () => {
@@ -131,6 +132,18 @@ export const VoiceAssistant = () => {
       console.error(err);
       setError((err as Error).message);
       setStatus('error');
+      appendLog({
+        level: 'error',
+        message: 'Error inesperado al iniciar la conversación.',
+        details: err instanceof Error ? err.message : String(err),
+      });
+      cleanUp();
+    }
+  }, [agentId, apiKey, appendLog, cleanUp]);
+
+  const sortedLogs = useMemo(() => {
+    return [...logs].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  }, [logs]);
       cleanUp();
     }
   }, [agentId, apiKey, cleanUp]);
@@ -172,6 +185,51 @@ export const VoiceAssistant = () => {
             VITE_ELEVENLABS_AGENT_ID.
           </p>
         )}
+        <div className="assistant__logsPanel">
+          <button
+            type="button"
+            className="assistant__logsToggle"
+            onClick={() => {
+              if (!showLogs) {
+                refreshLogs();
+              }
+              setShowLogs((prev) => !prev);
+            }}
+          >
+            {showLogs ? 'Ocultar registros' : 'Ver registros de ElevenLabs'}
+          </button>
+          {showLogs && (
+            <div className="assistant__logs">
+              <div className="assistant__logsHeader">
+                <span>Últimos eventos</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    clearElevenLabsLogs();
+                    refreshLogs();
+                  }}
+                >
+                  Limpiar
+                </button>
+              </div>
+              {sortedLogs.length === 0 ? (
+                <p className="assistant__logsEmpty">Aún no hay registros almacenados.</p>
+              ) : (
+                <ul>
+                  {sortedLogs.map((item) => (
+                    <li key={`${item.timestamp}-${item.message}`} className={`assistant__log assistant__log--${item.level}`}>
+                      <span className="assistant__logTime">
+                        {new Date(item.timestamp).toLocaleString()}
+                      </span>
+                      <span className="assistant__logMessage">{item.message}</span>
+                      {item.details && <pre className="assistant__logDetails">{item.details}</pre>}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </section>
   );

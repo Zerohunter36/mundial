@@ -91,6 +91,106 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
+.assistant__logsPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.assistant__logsToggle {
+  align-self: flex-start;
+  background: rgba(148, 163, 184, 0.15);
+  color: #e2e8f0;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  padding: 0.5rem 0.9rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.assistant__logsToggle:hover {
+  background: rgba(148, 163, 184, 0.25);
+  transform: translateY(-1px);
+}
+
+.assistant__logs {
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 18px;
+  padding: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.assistant__logsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  color: rgba(226, 232, 240, 0.8);
+}
+
+.assistant__logsHeader button {
+  background: none;
+  border: none;
+  color: rgba(244, 114, 182, 0.95);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.assistant__logsEmpty {
+  font-size: 0.85rem;
+  color: rgba(226, 232, 240, 0.7);
+}
+
+.assistant__logs ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.assistant__log {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.65rem;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+}
+
+.assistant__log--error {
+  border-color: rgba(248, 113, 113, 0.35);
+}
+
+.assistant__logTime {
+  font-size: 0.75rem;
+  color: rgba(148, 163, 184, 0.9);
+}
+
+.assistant__logMessage {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.assistant__logDetails {
+  margin: 0;
+  font-family: 'Fira Code', 'Courier New', monospace;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: rgba(15, 23, 42, 0.9);
+  border-radius: 8px;
+  padding: 0.5rem;
+  color: rgba(226, 232, 240, 0.85);
+}
+
 @media (max-width: 900px) {
   .assistant {
     grid-template-columns: 1fr;
