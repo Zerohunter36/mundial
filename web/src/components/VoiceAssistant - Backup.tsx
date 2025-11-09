@@ -172,15 +172,15 @@ export const VoiceAssistant = () => {
   );
 
   return (
-    <section className="assistant" data-status={status}>
+    <section className="assistant">
       <div>
         <h2>Habla con el asistente oficial</h2>
         <p>
-          Conéctate con el agente conversacional impulsado por la tecnolog[ia de NubaCom y resuelve tus dudas sobre
+          Conéctate con el agente conversacional impulsado por ElevenLabs y resuelve tus dudas sobre
           el Mundial 2026 en tiempo real con voz natural.
         </p>
         <ul>
-          <li>Conoce las fechas de partidos y horarios.</li>
+          <li>Agenda recordatorios de partidos y boletos.</li>
           <li>Descubre datos curiosos de selecciones y sedes.</li>
           <li>Recibe sugerencias de transporte y logística.</li>
         </ul>
@@ -195,17 +195,15 @@ export const VoiceAssistant = () => {
         <div className="assistant__actions">
           <button
             type="button"
-            className="assistant__btn assistant__btn--primary assistant__btn--start"
-			onClick={startConversation}
+            onClick={startConversation}
             disabled={status === 'initializing' || status === 'in-call'}
           >
             📞 Iniciar llamada
           </button>
           <button
             type="button"
-            className="assistant__btn assistant__btn--danger assistant__btn--stop"
-			onClick={() => cleanUp()}
-            disabled={status !== 'in-call' && status !== 'connecting'}
+            onClick={() => cleanUp()}
+            disabled={status !== 'in-call'}
             className="assistant__hangup"
           >
             ✖️ Finalizar

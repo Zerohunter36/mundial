@@ -70,16 +70,19 @@
   opacity: 0.6;
 }
 
-.assistant__actions button:first-of-type {
-  background: linear-gradient(135deg, #22d3ee, #0ea5e9);
-  color: #0f172a;
-  box-shadow: 0 14px 40px rgba(14, 165, 233, 0.35);
+/* Botón "Iniciar llamada" (verde) */
+.assistant__actions button:first-of-type,
+.assistant__btn--start {
+  background: linear-gradient(135deg, #22c55e, #16a34a); /* verde */
+  color: #022c22;
+  box-shadow: 0 14px 40px rgba(34, 197, 94, 0.45);
 }
 
 .assistant__hangup {
-  background: rgba(248, 113, 113, 0.2);
-  color: #fecaca;
-  border: 1px solid rgba(248, 113, 113, 0.4);
+  background: linear-gradient(135deg, #fb7185, #ef4444);
+  color: #fef2f2;
+  border: 1px solid #fecaca;
+  box-shadow: 0 14px 40px rgba(248, 113, 113, 0.45);
 }
 
 .assistant__error {
@@ -206,4 +209,42 @@
   .assistant__actions {
     flex-direction: column;
   }
+}
+
+/* Apariencia general de botones deshabilitados */
+.assistant__btn[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* --- ESTADOS DEL ASISTENTE SEGÚN data-status --- */
+
+/* Estado: listo / sin llamada -> Start activo, Stop apagado */
+.assistant[data-status="idle"] .assistant__btn--start,
+.assistant[data-status="ready"] .assistant__btn--start {
+  opacity: 1;
+}
+
+.assistant[data-status="idle"] .assistant__btn--stop,
+.assistant[data-status="ready"] .assistant__btn--stop {
+  opacity: 0.45;
+}
+
+/* Estado: en llamada / conectando -> Stop muy visible, Start claramente apagado */
+.assistant[data-status="in-call"] .assistant__btn--start,
+.assistant[data-status="connecting"] .assistant__btn--start {
+  opacity: 0.25;           /* más apagado */
+}
+
+/* Stop bien marcado en rojo cuando hay llamada */
+.assistant[data-status="in-call"] .assistant__btn--stop,
+.assistant[data-status="connecting"] .assistant__btn--stop {
+  opacity: 1;
+  filter: none;
+  background: linear-gradient(135deg, #fb7185, #ef4444);
+  color: #fef2f2;
+  box-shadow: 0 14px 40px rgba(248, 113, 113, 0.55);
+  border-color: #fecaca;
 }

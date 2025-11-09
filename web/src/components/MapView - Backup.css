@@ -8,12 +8,11 @@
   box-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
 }
 
-/* --- Header --- */
 .map-section__header {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  flex-wrap: wrap;              /* Para que el botón baje debajo del título en pantallas chicas */
+  flex-wrap: wrap;
 }
 
 .map-section__header h2 {
@@ -36,10 +35,9 @@
   box-shadow: 0 12px 20px rgba(249, 115, 22, 0.25);
 }
 
-/* --- Layout principal (sidebar + mapa) --- */
 .map-section__content {
   display: grid;
-  grid-template-columns: minmax(220px, 280px) 1fr; /* Sidebar fijo + mapa flexible */
+  grid-template-columns: minmax(220px, 280px) 1fr;
   gap: 1.5rem;
   width: 100%;
   min-width: 0;
@@ -53,7 +51,6 @@
   min-width: 0;
 }
 
-/* Tarjetas de categoría */
 .map-category {
   display: flex;
   gap: 0.85rem;
@@ -64,7 +61,7 @@
   text-align: left;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  width: 100%;                 /* Para que ocupen todo el ancho de su columna */
+  width: 100%;
   box-sizing: border-box;
 }
 
@@ -100,7 +97,6 @@
   box-shadow: 0 14px 35px rgba(15, 23, 42, 0.12);
 }
 
-/* --- Contenedor del mapa --- */
 .map-section__map {
   position: relative;
   border-radius: 24px;
@@ -114,24 +110,16 @@
   min-height: 340px;
 }
 
-/* Placeholder cuando no hay mapa */
 .map-section__placeholder {
   display: grid;
   place-items: center;
   min-height: 340px;
-  background: repeating-linear-gradient(
-    135deg,
-    #f1f5f9,
-    #f1f5f9 10px,
-    #e2e8f0 10px,
-    #e2e8f0 20px
-  );
+  background: repeating-linear-gradient(135deg, #f1f5f9, #f1f5f9 10px, #e2e8f0 10px, #e2e8f0 20px);
   color: #475569;
   text-align: center;
   padding: 2rem;
 }
 
-/* --- Footer con chips de lugares --- */
 .map-section__footer {
   display: flex;
   flex-direction: column;
@@ -168,32 +156,27 @@
   color: #ef4444;
 }
 
-/* --- Responsive: tablets y móviles --- */
 @media (max-width: 900px) {
   .map-section {
     padding: 1.5rem;
   }
 
-  /* Sidebar arriba y mapa abajo */
   .map-section__content {
     grid-template-columns: 1fr;
   }
 
-  /* Las categorías se acomodan en varias columnas */
   .map-section__sidebar {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
   }
 }
 
-/* --- Responsive: móviles pequeños --- */
 @media (max-width: 600px) {
   .map-section {
     padding: 1.2rem;
     border-radius: 22px;
   }
 
-  /* Una sola columna de categorías (para que no se aplasten) */
   .map-section__sidebar {
     grid-template-columns: 1fr;
   }
