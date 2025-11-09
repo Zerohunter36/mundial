@@ -58,6 +58,8 @@ npm run preview
 - La llamada de voz utiliza WebRTC y requiere permisos de micrófono en el navegador.
 - Asegúrate de que tu plan de ElevenLabs tenga acceso a Conversational AI y que el agente esté configurado para español.
 - El flujo de señalización sigue el endpoint `conversation` descrito en la documentación pública de ElevenLabs.
+- Los eventos y errores de la integración se almacenan en `localStorage` bajo la clave `mundial_elevenlabs_logs`. En la UI
+  del asistente encontrarás un botón para visualizar y limpiar estos registros.
 
 ## Estructura principal del proyecto
 
