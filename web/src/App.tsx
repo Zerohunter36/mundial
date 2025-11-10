@@ -145,7 +145,9 @@ function App() {
           />
         ))}
       </section>
-
+      <section className="assistant-wrapper" id="asistente">
+        <VoiceAssistant />
+      </section>
       <section className="schedule" id="horarios">
         <div className="section-header">
           <h2>Horarios oficiales del Mundial 2026</h2>
@@ -153,12 +155,7 @@ function App() {
         </div>
         <ScheduleList matches={matches} />
       </section>
-
       <MapView center={position ?? null} activeCategory={mapCategory} onCategoryChange={setMapCategory} />
-
-      <section className="assistant-wrapper" id="asistente">
-        <VoiceAssistant />
-      </section>
     </div>
   );
 }

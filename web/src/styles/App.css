@@ -149,7 +149,7 @@
 }
 
 .assistant-wrapper {
-  padding-bottom: 4rem;
+  padding-bottom: 1rem;
 }
 
 @media (max-width: 1024px) {
@@ -195,6 +195,6 @@
   }
 
   .schedule {
-    padding: 1.5rem;
+    padding: 1rem;
   }
 }
